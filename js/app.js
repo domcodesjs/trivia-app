@@ -1,35 +1,64 @@
+// const store = {
+//   // will pull locally and from api
+//   questions: [
+//     {
+//       question: 'What color is broccoli?',
+//       answers: ['red', 'orange', 'pink', 'green'],
+//       correctAnswer: 'green'
+//     },
+//     {
+//       question: 'What is the current year?',
+//       answers: ['1970', '2015', '2020', '2005'],
+//       correctAnswer: '2020'
+//     }
+//   ],
+//   quizStarted: false,
+//   loading: false,
+//   questionNumber: 0,
+//   score: 0
+// };
+
 const store = {
-  // 5 or more questions are required
-  questions: [],
+  // will pull locally and from api
+  questions: [
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    }
+  ],
   quizStarted: false,
   loading: false,
   questionNumber: 0,
   score: 0
 };
 
-// any 10 multiple
-// https://opentdb.com/api.php?amount=10&type=multiple
-
-const categories = {
-  'General Knowledge': 1,
-  'Science: Computers': 455,
-  'Science: Mathematics': 34,
-  'Science & Nature': 2,
-  Mythology: 3,
-  Sports: 4,
-  Geography: 5,
-  History: 6,
-  Politics: 7,
-  Art: 8,
-  Celebrities: 8,
-  Animals: 8,
-  Vehicles: 8,
-  Animal: 8
-};
+// const categories = {
+//   'General Knowledge': 1,
+//   'Science: Computers': 455,
+//   'Science: Mathematics': 34,
+//   'Science & Nature': 2,
+//   Mythology: 3,
+//   Sports: 4,
+//   Geography: 5,
+//   History: 6,
+//   Politics: 7,
+//   Art: 8,
+//   Celebrities: 8,
+//   Animals: 8,
+//   Vehicles: 8,
+//   Animal: 8
+// };
 
 function getQuestions(category, difficulty) {
+  // also have a local json file with some categories/questions I could locally pull from
   const API_URL = 'https://opentdb.com/api.php?amount=10';
-  const fetchPromise = fetch('https://opentdb.com/api.php?amount=10');
+  const fetchPromise = fetch(API_URL);
 
   function shuffleAnswers(arr) {
     return arr.sort(() => Math.random() - 0.5);
@@ -132,6 +161,7 @@ function onSubmit(e) {
     $(this).find('input[type=submit]').attr('disabled', 'disabled');
     answer.css('background-color', '#e31c3d');
     $(this).parent().find('button').removeAttr('disabled');
+    getCorrectAnswer.bind(this)();
     $(this)
       .parent()
       .find('button')
@@ -148,8 +178,15 @@ function checkAnswer(question, givenAnswer) {
   return question.correctAnswer === givenAnswer;
 }
 
-function getCorrectAnswer(question) {
-  return question.correctAnswer;
+function getCorrectAnswer() {
+  const answerInputs = $('input[type=submit]');
+  const answer = store.questions[store.questionNumber - 1].correctAnswer;
+  // console.log(answerInputs);
+  return answerInputs.each(function () {
+    if ($(this).val() === answer) {
+      $(this).css('background-color', '#2e8540');
+    }
+  });
 }
 
 function isGameDone() {
