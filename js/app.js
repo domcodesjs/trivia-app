@@ -1,6 +1,3 @@
-/**
- * Example store structure
- */
 const store = {
   // 5 or more questions are required
   questions: [
@@ -20,23 +17,7 @@ const store = {
   score: 0
 };
 
-/**
- *
- * Technical requirements:
- *
- * Your app should include a render() function, that regenerates the view each time the store is updated.
- * See your course material and access support for more details.
- *
- * NO additional HTML elements should be added to the index.html file.
- *
- * You may add attributes (classes, ids, etc) to the existing HTML elements, or link stylesheets or additional scripts if necessary
- *
- * SEE BELOW FOR THE CATEGORIES OF THE TYPES OF FUNCTIONS YOU WILL BE CREATING 👇
- *
- */
-
 /********** TEMPLATE GENERATION FUNCTIONS **********/
-// These functions return HTML templates
 function createQuestion(question) {
   console.log(question.answers);
   return `
@@ -49,30 +30,31 @@ function createQuestion(question) {
   `;
 }
 
-function createSubmitButton() {
-  return '<button>Submit Answer</button>';
-}
-
 function createStartButton() {
   return '<button>Start</button>';
 }
 
-function renderQuestion() {
-  $('main').append(createQuestion(store.questions[0]));
-  $('button').remove();
+function createSubmitButton() {
+  return '<button>Submit Answer</button>';
 }
 
 function init() {
   $('main').append(createStartButton());
-  $('button').on('click', renderQuestion);
+  $('button').on('click', () => renderQuestion(store));
 }
 
-init();
-
 /********** RENDER FUNCTION(S) **********/
-
-// This function conditionally replaces the contents of the <main> tag based on the state of the store
+function renderQuestion(store) {
+  $('main').append(createQuestion(store.questions[0]));
+  $('button').remove();
+}
 
 /********** EVENT HANDLER FUNCTIONS **********/
+function checkAnswer(question, givenAnswer) {
+  return question.correctAnswer === givenAnswer;
+}
+
+function answerOnClick() {}
 
 // These functions handle events (submit, click, etc)
+$(init);
