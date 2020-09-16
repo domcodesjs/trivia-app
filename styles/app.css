@@ -26,6 +26,10 @@ body {
   font-size: 1.6rem;
 }
 
+form {
+  margin-top: 2.4rem;
+}
+
 header {
   height: 10vh;
   display: flex;
@@ -47,13 +51,13 @@ ul {
   padding: 0;
 }
 
-li {
+input[type='submit'] {
   height: 4.8rem;
   width: 100%;
   background-color: teal;
   cursor: pointer;
-  outline: none;
   border-radius: 4px;
+  outline: none;
   text-transform: uppercase;
   border: none;
   color: #fff;
@@ -63,6 +67,22 @@ li {
   align-items: center;
   justify-content: center;
   user-select: none;
+}
+
+input[type='submit']:focus {
+  transform: scale(1.1);
+}
+
+input[type='submit']:hover {
+  transform: scale(1.1);
+}
+
+.next-btn {
+  background-color: #205493;
+}
+
+.next-btn:disabled {
+  background-color: #5b616b;
 }
 
 button {
