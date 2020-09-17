@@ -1,4 +1,6 @@
 $(function () {
+  const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
+  const incorrectSound = new Audio('./assets/sounds/incorrect-sound.mp3');
   const store = {
     questions: [
       {
@@ -31,9 +33,6 @@ $(function () {
     questionNumber: 0,
     score: 0
   };
-
-  const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
-  const wrongSound = new Audio('./assets/sounds/wrong-sound.mp3');
 
   /********** TEMPLATE GENERATION FUNCTIONS **********/
   function createQuestion(question) {
@@ -117,7 +116,7 @@ $(function () {
     if (checkAnswer(currentQuestionIndex, answer.val())) {
       return correctAnswer.bind(this)(answer);
     } else {
-      return wrongAnswer.bind(this)(answer);
+      return incorrectAnswer.bind(this)(answer);
     }
   }
 
@@ -129,9 +128,9 @@ $(function () {
         return render();
       }
       return renderEndGame();
-    } else if (str === 'wrong') {
-      wrongSound.pause();
-      wrongSound.currentTime = 0;
+    } else if (str === 'incorrect') {
+      incorrectSound.pause();
+      incorrectSound.currentTime = 0;
       if (isGameDone()) {
         return render();
       }
@@ -175,9 +174,9 @@ $(function () {
       .on('click', () => onQuizButtonClick('correct'));
   }
 
-  function wrongAnswer(answer) {
+  function incorrectAnswer(answer) {
     incrementQuestionNumber();
-    wrongSound.play();
+    incorrectSound.play();
     disableSubmitInputs.bind(this)();
     disableTransformCSS();
     modifyAnswerCSS(answer, { 'background-color': '#e31c3d' });
@@ -186,7 +185,7 @@ $(function () {
     $(this)
       .parent()
       .find('button')
-      .on('click', () => onQuizButtonClick('wrong'));
+      .on('click', () => onQuizButtonClick('incorrect'));
   }
 
   function modifyAnswerCSS(answer, css) {
