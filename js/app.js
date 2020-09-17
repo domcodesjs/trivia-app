@@ -9,50 +9,49 @@ const store = {
       question: 'What is the current year?',
       answers: ['1970', '2015', '2020', '2005'],
       correctAnswer: '2020'
-    },
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    },
-    {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
-    },
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    },
-    {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
-    },
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    },
-    {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
-    },
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    },
-    {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
     }
+    // {
+    //   question: 'What color is broccoli?',
+    //   answers: ['red', 'orange', 'pink', 'green'],
+    //   correctAnswer: 'green'
+    // },
+    // {
+    //   question: 'What is the current year?',
+    //   answers: ['1970', '2015', '2020', '2005'],
+    //   correctAnswer: '2020'
+    // },
+    // {
+    //   question: 'What color is broccoli?',
+    //   answers: ['red', 'orange', 'pink', 'green'],
+    //   correctAnswer: 'green'
+    // },
+    // {
+    //   question: 'What is the current year?',
+    //   answers: ['1970', '2015', '2020', '2005'],
+    //   correctAnswer: '2020'
+    // },
+    // {
+    //   question: 'What color is broccoli?',
+    //   answers: ['red', 'orange', 'pink', 'green'],
+    //   correctAnswer: 'green'
+    // },
+    // {
+    //   question: 'What is the current year?',
+    //   answers: ['1970', '2015', '2020', '2005'],
+    //   correctAnswer: '2020'
+    // },
+    // {
+    //   question: 'What color is broccoli?',
+    //   answers: ['red', 'orange', 'pink', 'green'],
+    //   correctAnswer: 'green'
+    // },
+    // {
+    //   question: 'What is the current year?',
+    //   answers: ['1970', '2015', '2020', '2005'],
+    //   correctAnswer: '2020'
+    // }
   ],
   quizStarted: false,
-  loading: false,
   questionNumber: 0,
   score: 0
 };
@@ -116,14 +115,13 @@ function createQuestion(question) {
         .map((answer) => `<input type="submit" value=${answer} >`)
         .join('')}
     </form>
-    <button class="js-next-btn next-btn" type="button" disabled>Next Question</button>
-    <button class="js-next-btn done-btn" type="button">Next Question</button>
+    ${createQuizButton()}
   `;
 }
 
 function createEndGameScreen() {
   return `
-    You got ${store.score} out of ${store.questions.length} right!
+    You scored ${(store.score / store.questions.length) * 100}%!
   `;
 }
 
@@ -133,15 +131,22 @@ function createStartButton() {
 
 function createGameHeader() {
   return `
-    <h2>Score ${store.score}</h2>
+    <h2>Score: ${store.score}</h2>
     <h1>Trivia</h1>
     <h2>Question ${store.questionNumber + 1}/${store.questions.length}</h2>
   `;
 }
 
+function createQuizButton() {
+  if (!(store.questionNumber === store.questions.length - 1)) {
+    return '<button class="js-next-btn next-btn" type="button" disabled>Next Question</button>';
+  }
+  return '<button class="done-btn" type="button">See Results</button>';
+}
+
 function render() {
   renderHeader();
-  renderQuestion();
+  return renderQuestion();
 }
 
 /********** RENDER FUNCTION(S) **********/
@@ -178,37 +183,30 @@ function startBtnClick() {
 function onSubmit(e) {
   e.preventDefault();
   const answer = $(this).find('input[type=submit]:focus');
-  if (checkAnswer(store.questions[store.questionNumber], answer.val())) {
-    store.score += 1;
-    store.questionNumber += 1;
-    renderUpdatedPoints();
-    correctSound.play();
-    $(this).find(':submit').attr('disabled', 'disabled');
-    answer.css('background-color', '#2e8540');
-    $(this).parent().find('button').removeAttr('disabled');
-    $(this)
-      .parent()
-      .find('button')
-      .on('click', () => {
-        correctSound.pause();
-        correctSound.currentTime = 0;
-        return render();
-      });
+  const currentQuestionIndex = store.questions[store.questionNumber];
+
+  if (checkAnswer(currentQuestionIndex, answer.val())) {
+    return correctAnswer.bind(this)(answer);
   } else {
-    store.questionNumber += 1;
-    wrongSound.play();
-    $(this).find('input[type=submit]').attr('disabled', 'disabled');
-    answer.css('background-color', '#e31c3d');
-    $(this).parent().find('button').removeAttr('disabled');
-    getCorrectAnswer.bind(this)();
-    $(this)
-      .parent()
-      .find('button')
-      .on('click', () => {
-        wrongSound.pause();
-        wrongSound.currentTime = 0;
-        return render();
-      });
+    return wrongAnswer.bind(this)(answer);
+  }
+}
+
+function onQuizButtonClick(str) {
+  if (str === 'correct') {
+    correctSound.pause();
+    correctSound.currentTime = 0;
+    if (isGameDone()) {
+      return render();
+    }
+    return renderEndGame();
+  } else if (str === 'wrong') {
+    wrongSound.pause();
+    wrongSound.currentTime = 0;
+    if (isGameDone()) {
+      return render();
+    }
+    return renderEndGame();
   }
 }
 
@@ -220,7 +218,6 @@ function checkAnswer(question, givenAnswer) {
 function getCorrectAnswer() {
   const answerInputs = $('input[type=submit]');
   const answer = store.questions[store.questionNumber - 1].correctAnswer;
-  // console.log(answerInputs);
   return answerInputs.each(function () {
     if ($(this).val() === answer) {
       $(this).css('background-color', '#2e8540');
@@ -228,8 +225,35 @@ function getCorrectAnswer() {
   });
 }
 
+function correctAnswer(answer) {
+  store.score += 1;
+  store.questionNumber += 1;
+  renderUpdatedPoints();
+  correctSound.play();
+  $(this).find(':submit').attr('disabled', 'disabled');
+  $(answer).css('background-color', '#2e8540');
+  $(this).parent().find('button').removeAttr('disabled');
+  $(this)
+    .parent()
+    .find('button')
+    .on('click', () => onQuizButtonClick('correct'));
+}
+
+function wrongAnswer(answer) {
+  store.questionNumber += 1;
+  wrongSound.play();
+  $(this).find('input[type=submit]').attr('disabled', 'disabled');
+  answer.css('background-color', '#e31c3d');
+  $(this).parent().find('button').removeAttr('disabled');
+  getCorrectAnswer.bind(this)();
+  $(this)
+    .parent()
+    .find('button')
+    .on('click', () => onQuizButtonClick('wrong'));
+}
+
 function isGameDone() {
-  if (store.questionNumber <= store.questions.length - 1) {
+  if (store.questionNumber === store.questions.length) {
     return false;
   }
   return true;
