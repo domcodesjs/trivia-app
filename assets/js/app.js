@@ -3,29 +3,48 @@ $(function () {
   const incorrectSound = new Audio('./assets/sounds/incorrect-sound.mp3');
   const questions = [
     {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
+      question: 'How do you call a function named "myFunction"?',
+      answers: [
+        'call myFunction()',
+        'myFunction()',
+        'call function myFunction',
+        'Call.myFunction()'
+      ],
+      correctAnswer: 'myFunction()'
     },
     {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
+      question:
+        'How do you round the number 7.25, to the nearest whole number?',
+      answers: [
+        'round(7.25)',
+        'Math.rnd(7.25)',
+        'rnd(7.25)',
+        'Math.round(7.25)'
+      ],
+      correctAnswer: 'Math.round(7.25)'
     },
     {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
+      question:
+        'Which of the following methods of the Number object defines how many total digits to display of a number?',
+      answers: [
+        'toExponential()',
+        'toFixed()',
+        'toLocaleString()',
+        'toPrecision()'
+      ],
+      correctAnswer: 'toPrecision()'
     },
     {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
+      question:
+        'Which of the following methods of the Array object joins all the elements of an array into a string?',
+      answers: ['concat()', 'join()', 'pop()', 'map()'],
+      correctAnswer: 'join()'
     },
     {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
+      question:
+        'Which of the following methods of the Array object returns a new array comprised of this array joined with other array(s) and/or value(s)?',
+      answers: ['concat()', 'pop()', 'push()', 'some()'],
+      correctAnswer: 'concat()'
     }
   ];
   const store = {
@@ -50,7 +69,7 @@ $(function () {
     </div>
     <form class="trivia-question">
       ${question.answers
-        .map((answer) => `<input type="submit" value=${answer} >`)
+        .map((answer) => `<input type="submit" value="${answer}" >`)
         .join('')}
     </form>
     ${createQuizNextButton()}
