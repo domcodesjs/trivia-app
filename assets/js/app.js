@@ -1,42 +1,43 @@
-const store = {
-  questions: [
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    },
-    {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
-    },
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    },
-    {
-      question: 'What is the current year?',
-      answers: ['1970', '2015', '2020', '2005'],
-      correctAnswer: '2020'
-    },
-    {
-      question: 'What color is broccoli?',
-      answers: ['red', 'orange', 'pink', 'green'],
-      correctAnswer: 'green'
-    }
-  ],
-  quizStarted: false,
-  questionNumber: 0,
-  score: 0
-};
+$(function () {
+  const store = {
+    questions: [
+      {
+        question: 'What color is broccoli?',
+        answers: ['red', 'orange', 'pink', 'green'],
+        correctAnswer: 'green'
+      },
+      {
+        question: 'What is the current year?',
+        answers: ['1970', '2015', '2020', '2005'],
+        correctAnswer: '2020'
+      },
+      {
+        question: 'What color is broccoli?',
+        answers: ['red', 'orange', 'pink', 'green'],
+        correctAnswer: 'green'
+      },
+      {
+        question: 'What is the current year?',
+        answers: ['1970', '2015', '2020', '2005'],
+        correctAnswer: '2020'
+      },
+      {
+        question: 'What color is broccoli?',
+        answers: ['red', 'orange', 'pink', 'green'],
+        correctAnswer: 'green'
+      }
+    ],
+    quizStarted: false,
+    questionNumber: 0,
+    score: 0
+  };
 
-const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
-const wrongSound = new Audio('./assets/sounds/wrong-sound.mp3');
+  const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
+  const wrongSound = new Audio('./assets/sounds/wrong-sound.mp3');
 
-/********** TEMPLATE GENERATION FUNCTIONS **********/
-function createQuestion(question) {
-  return `
+  /********** TEMPLATE GENERATION FUNCTIONS **********/
+  function createQuestion(question) {
+    return `
     <h1>${question.question}</h1>  
     <form class="trivia-question">
       ${question.answers
@@ -45,150 +46,154 @@ function createQuestion(question) {
     </form>
     ${createQuizNextButton()}
   `;
-}
+  }
 
-function createEndGameScreen() {
-  return `
+  function createEndGameScreen() {
+    return `
     You scored ${(store.score / store.questions.length) * 100}%!
   `;
-}
+  }
 
-function createStartButton() {
-  return '<button class="js-start-btn">Start</button>';
-}
+  function createStartButton() {
+    return '<button class="js-start-btn">Start</button>';
+  }
 
-function createGameHeader() {
-  return `
+  function createGameHeader() {
+    return `
     <h2>Score: ${store.score}</h2>
     <h1>Trivia</h1>
     <h2>Question ${store.questionNumber + 1}/${store.questions.length}</h2>
   `;
-}
-
-function createQuizNextButton() {
-  if (!(store.questionNumber === store.questions.length - 1)) {
-    return '<button class="ext-btn" type="button" disabled>Next Question</button>';
   }
-  return '<button class="next-btn" type="button" disabled>See Results</button>';
-}
 
-function render() {
-  renderHeader();
-  return renderQuestion();
-}
-
-/********** RENDER FUNCTION(S) **********/
-function renderHeader() {
-  $('header').html(createGameHeader());
-  $('header').css('justify-content', 'space-between');
-}
-
-function renderQuestion() {
-  $('main').html(createQuestion(store.questions[store.questionNumber]));
-  return $('form').on('submit', onSubmit);
-}
-
-function renderUpdatedPoints() {
-  return $('header h2:first').text(`Score: ${store.score}`);
-}
-
-function renderEndGame() {
-  return $('main').html(createEndGameScreen());
-}
-
-function init() {
-  $('main').html(createStartButton());
-  $('.js-start-btn').on('click', startBtnClick);
-}
-
-/********** EVENT HANDLER FUNCTIONS **********/
-function startBtnClick() {
-  store.quizStarted = true;
-  renderHeader();
-  renderQuestion(store.questions[store.questionNumber]);
-}
-
-function onSubmit(e) {
-  e.preventDefault();
-  const answer = $(this).find('input[type=submit]:focus');
-  const currentQuestionIndex = store.questions[store.questionNumber];
-
-  if (checkAnswer(currentQuestionIndex, answer.val())) {
-    return correctAnswer.bind(this)(answer);
-  } else {
-    return wrongAnswer.bind(this)(answer);
-  }
-}
-
-function onQuizButtonClick(str) {
-  if (str === 'correct') {
-    correctSound.pause();
-    correctSound.currentTime = 0;
-    if (isGameDone()) {
-      return render();
+  function createQuizNextButton() {
+    if (!(store.questionNumber === store.questions.length - 1)) {
+      return '<button class="ext-btn" type="button" disabled>Next Question</button>';
     }
-    return renderEndGame();
-  } else if (str === 'wrong') {
-    wrongSound.pause();
-    wrongSound.currentTime = 0;
-    if (isGameDone()) {
-      return render();
-    }
-    return renderEndGame();
+    return '<button class="next-btn" type="button" disabled>See Results</button>';
   }
-}
 
-/********** HELPER FUNCTIONS **********/
-function checkAnswer(question, givenAnswer) {
-  return question.correctAnswer === givenAnswer;
-}
-
-function getCorrectAnswer() {
-  const answerInputs = $('input[type=submit]');
-  const answer = store.questions[store.questionNumber - 1].correctAnswer;
-  return answerInputs.each(function () {
-    if ($(this).val() === answer) {
-      $(this).css({ 'background-color': '#2e8540', transform: 'scale(1.1)' });
-    }
-  });
-}
-
-function correctAnswer(answer) {
-  store.score += 1;
-  store.questionNumber += 1;
-  renderUpdatedPoints();
-  correctSound.play();
-  $(this).find(':submit').attr('disabled', 'disabled');
-  $('input[type=submit]:hover').css('transform', 'scale(1)');
-  $('input[type=submit]:submit').css('transform', 'scale(1)');
-  $(answer).css({ 'background-color': '#2e8540', transform: 'scale(1.1)' });
-  $(this).parent().find('button').removeAttr('disabled');
-  $(this)
-    .parent()
-    .find('button')
-    .on('click', () => onQuizButtonClick('correct'));
-}
-
-function wrongAnswer(answer) {
-  store.questionNumber += 1;
-  wrongSound.play();
-  $(this).find('input[type=submit]').attr('disabled', 'disabled');
-  $('input[type=submit]:hover').css('transform', 'scale(1)');
-  $('input[type=submit]:submit').css('transform', 'scale(1)');
-  answer.css({ 'background-color': '#e31c3d' });
-  $(this).parent().find('button').removeAttr('disabled');
-  getCorrectAnswer.bind(this)();
-  $(this)
-    .parent()
-    .find('button')
-    .on('click', () => onQuizButtonClick('wrong'));
-}
-
-function isGameDone() {
-  if (store.questionNumber === store.questions.length) {
-    return false;
+  function render() {
+    renderHeader();
+    return renderQuestion();
   }
-  return true;
-}
 
-$(init);
+  /********** RENDER FUNCTION(S) **********/
+  function renderHeader() {
+    $('header').html(createGameHeader());
+    $('header').css('justify-content', 'space-between');
+  }
+
+  function renderQuestion() {
+    $('main').html(createQuestion(store.questions[store.questionNumber]));
+    return $('form').on('submit', onSubmit);
+  }
+
+  function renderUpdatedPoints() {
+    return $('header h2:first').text(`Score: ${store.score}`);
+  }
+
+  function renderEndGame() {
+    return $('main').html(createEndGameScreen());
+  }
+
+  function init() {
+    $('main').html(createStartButton());
+    $('.js-start-btn').on('click', startBtnClick);
+  }
+
+  /********** EVENT HANDLER FUNCTIONS **********/
+  function startBtnClick() {
+    store.quizStarted = true;
+    renderHeader();
+    renderQuestion(store.questions[store.questionNumber]);
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    const answer = $(this).find('input[type=submit]:focus');
+    const currentQuestionIndex = store.questions[store.questionNumber];
+
+    if (checkAnswer(currentQuestionIndex, answer.val())) {
+      return correctAnswer.bind(this)(answer);
+    } else {
+      return wrongAnswer.bind(this)(answer);
+    }
+  }
+
+  function onQuizButtonClick(str) {
+    if (str === 'correct') {
+      correctSound.pause();
+      correctSound.currentTime = 0;
+      if (isGameDone()) {
+        return render();
+      }
+      return renderEndGame();
+    } else if (str === 'wrong') {
+      wrongSound.pause();
+      wrongSound.currentTime = 0;
+      if (isGameDone()) {
+        return render();
+      }
+      return renderEndGame();
+    }
+  }
+
+  /********** HELPER FUNCTIONS **********/
+  function checkAnswer(question, givenAnswer) {
+    return question.correctAnswer === givenAnswer;
+  }
+
+  function getCorrectAnswer() {
+    const answerInputs = $('input[type=submit]');
+    const answer = store.questions[store.questionNumber - 1].correctAnswer;
+    return answerInputs.each(function () {
+      if ($(this).val() === answer) {
+        $(this).css({
+          'background-color': '#2e8540',
+          transform: 'scale(1.1)'
+        });
+      }
+    });
+  }
+
+  function correctAnswer(answer) {
+    store.score += 1;
+    store.questionNumber += 1;
+    renderUpdatedPoints();
+    correctSound.play();
+    $(this).find(':submit').attr('disabled', 'disabled');
+    $('input[type=submit]:hover').css('transform', 'scale(1)');
+    $('input[type=submit]:submit').css('transform', 'scale(1)');
+    $(answer).css({ 'background-color': '#2e8540', transform: 'scale(1.1)' });
+    $(this).parent().find('button').removeAttr('disabled');
+    $(this)
+      .parent()
+      .find('button')
+      .on('click', () => onQuizButtonClick('correct'));
+  }
+
+  function wrongAnswer(answer) {
+    store.questionNumber += 1;
+    wrongSound.play();
+    $(this).find('input[type=submit]').attr('disabled', 'disabled');
+    $('input[type=submit]:hover').css('transform', 'scale(1)');
+    $('input[type=submit]:submit').css('transform', 'scale(1)');
+    answer.css({ 'background-color': '#e31c3d' });
+    $(this).parent().find('button').removeAttr('disabled');
+    getCorrectAnswer.bind(this)();
+    $(this)
+      .parent()
+      .find('button')
+      .on('click', () => onQuizButtonClick('wrong'));
+  }
+
+  function isGameDone() {
+    if (store.questionNumber === store.questions.length) {
+      return false;
+    }
+    return true;
+  }
+
+  $(init);
+});
