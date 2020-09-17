@@ -1,7 +1,8 @@
 # Trivia App
 
-[Live Site Hosted with Vercel](https://trivia-app-p0isgd8ek.vercel.app/)
-[Live Site Hosted with Github Pages](https://domcodesjs.github.io/trivia-app/)
+#### [Live Site Hosted with Vercel](https://trivia-app-p0isgd8ek.vercel.app/)
+
+#### [Live Site Hosted with Github Pages](https://domcodesjs.github.io/trivia-app/)
 
 ### User experience requirements
 
