@@ -158,15 +158,17 @@ $(function () {
   }
 
   function correctAnswer(answer) {
-    store.score += 1;
-    store.questionNumber += 1;
+    incrementScore();
+    incrementQuestionNumber();
     renderUpdatedPoints();
     correctSound.play();
-    $(this).find(':submit').attr('disabled', 'disabled');
-    $('input[type=submit]:hover').css('transform', 'scale(1)');
-    $('input[type=submit]:submit').css('transform', 'scale(1)');
-    $(answer).css({ 'background-color': '#2e8540', transform: 'scale(1.1)' });
-    $(this).parent().find('button').removeAttr('disabled');
+    disableSubmitInputs.bind(this)();
+    disableTransformCSS();
+    modifyAnswerCSS(answer, {
+      'background-color': '#2e8540',
+      transform: 'scale(1.1)'
+    });
+    enableNextButton.bind(this)();
     $(this)
       .parent()
       .find('button')
@@ -174,18 +176,42 @@ $(function () {
   }
 
   function wrongAnswer(answer) {
-    store.questionNumber += 1;
+    incrementQuestionNumber();
     wrongSound.play();
-    $(this).find('input[type=submit]').attr('disabled', 'disabled');
-    $('input[type=submit]:hover').css('transform', 'scale(1)');
-    $('input[type=submit]:submit').css('transform', 'scale(1)');
-    answer.css({ 'background-color': '#e31c3d' });
-    $(this).parent().find('button').removeAttr('disabled');
+    disableSubmitInputs.bind(this)();
+    disableTransformCSS();
+    modifyAnswerCSS(answer, { 'background-color': '#e31c3d' });
+    enableNextButton.bind(this)();
     getCorrectAnswer.bind(this)();
     $(this)
       .parent()
       .find('button')
       .on('click', () => onQuizButtonClick('wrong'));
+  }
+
+  function modifyAnswerCSS(answer, css) {
+    return answer.css(css);
+  }
+
+  function enableNextButton() {
+    return $(this).parent().find('button').removeAttr('disabled');
+  }
+
+  function disableSubmitInputs() {
+    return $(this).find('input[type=submit]').attr('disabled', 'disabled');
+  }
+
+  function disableTransformCSS() {
+    $('input[type=submit]:hover').css('transform', 'scale(1)');
+    return $('input[type=submit]:submit').css('transform', 'scale(1)');
+  }
+
+  function incrementScore() {
+    return (store.score += 1);
+  }
+
+  function incrementQuestionNumber() {
+    return (store.questionNumber += 1);
   }
 
   function isGameDone() {
