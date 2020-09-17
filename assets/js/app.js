@@ -9,47 +9,22 @@ const store = {
       question: 'What is the current year?',
       answers: ['1970', '2015', '2020', '2005'],
       correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
     }
-    // {
-    //   question: 'What color is broccoli?',
-    //   answers: ['red', 'orange', 'pink', 'green'],
-    //   correctAnswer: 'green'
-    // },
-    // {
-    //   question: 'What is the current year?',
-    //   answers: ['1970', '2015', '2020', '2005'],
-    //   correctAnswer: '2020'
-    // },
-    // {
-    //   question: 'What color is broccoli?',
-    //   answers: ['red', 'orange', 'pink', 'green'],
-    //   correctAnswer: 'green'
-    // },
-    // {
-    //   question: 'What is the current year?',
-    //   answers: ['1970', '2015', '2020', '2005'],
-    //   correctAnswer: '2020'
-    // },
-    // {
-    //   question: 'What color is broccoli?',
-    //   answers: ['red', 'orange', 'pink', 'green'],
-    //   correctAnswer: 'green'
-    // },
-    // {
-    //   question: 'What is the current year?',
-    //   answers: ['1970', '2015', '2020', '2005'],
-    //   correctAnswer: '2020'
-    // },
-    // {
-    //   question: 'What color is broccoli?',
-    //   answers: ['red', 'orange', 'pink', 'green'],
-    //   correctAnswer: 'green'
-    // },
-    // {
-    //   question: 'What is the current year?',
-    //   answers: ['1970', '2015', '2020', '2005'],
-    //   correctAnswer: '2020'
-    // }
   ],
   quizStarted: false,
   questionNumber: 0,
@@ -58,52 +33,6 @@ const store = {
 
 const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
 const wrongSound = new Audio('./assets/sounds/wrong-sound.mp3');
-
-// const triviaCategories = {
-//   'General Knowledge': 9,
-//   'Science: Computers': 18,
-//   'Science: Mathematics': 19,
-//   'Science & Nature': 17,
-//   Mythology: 20,
-//   Sports: 21,
-//   Geography: 22,
-//   History: 23,
-//   Politics: 24,
-//   Art: 25,
-//   Animals: 27,
-//   Animal: 27,
-//   Vehicles: 28
-// };
-
-// function getQuestions(category, difficulty) {
-//   // also have a local json file with some categories/questions I could locally pull from
-//   const API_URL = 'https://opentdb.com/api.php?amount=10';
-//   const fetchPromise = fetch(API_URL);
-
-//   function shuffleAnswers(arr) {
-//     return arr.sort(() => Math.random() - 0.5);
-//   }
-
-//   return fetchPromise
-//     .then((res) => {
-//       return res.json();
-//     })
-//     .then((res) => {
-//       store.questions = res.results.map((question) => {
-//         return {
-//           question: question.question,
-//           answers: shuffleAnswers([
-//             ...question.incorrect_answers,
-//             question.correct_answer
-//           ]),
-//           correctAnswer: question.correct_answer
-//         };
-//       });
-//       console.log(store);
-//     });
-// }
-
-// getQuestions();
 
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 function createQuestion(question) {
@@ -127,34 +56,6 @@ function createEndGameScreen() {
 function createStartButton() {
   return '<button class="js-start-btn">Start</button>';
 }
-
-// for later
-// function createGameOptions() {
-//   return `
-//     <form>
-//       ${createCategoryDropdown()}
-//     </form>
-//   `;
-// }
-
-// for later
-// function createCategoryDropdown() {
-//   return `
-//     <label for="categories">Choose a category:</label>
-//     <select name="categories" id="cars">${createCategoryOptions()}</select>
-//   `;
-// }
-
-// for later
-// function createCategoryOptions() {
-//   let selections = '';
-
-//   for (let key in triviaCategories) {
-//     selections += `<option value="${triviaCategories[key]}">${key}</option>)`;
-//   }
-
-//   return selections;
-// }
 
 function createGameHeader() {
   return `
@@ -286,5 +187,4 @@ function isGameDone() {
   return true;
 }
 
-// Start it up
 $(init);
