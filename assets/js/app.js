@@ -1,38 +1,43 @@
 $(function () {
   const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
   const incorrectSound = new Audio('./assets/sounds/incorrect-sound.mp3');
+  const questions = [
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    }
+  ];
   const store = {
-    questions: [
-      {
-        question: 'What color is broccoli?',
-        answers: ['red', 'orange', 'pink', 'green'],
-        correctAnswer: 'green'
-      },
-      {
-        question: 'What is the current year?',
-        answers: ['1970', '2015', '2020', '2005'],
-        correctAnswer: '2020'
-      },
-      {
-        question: 'What color is broccoli?',
-        answers: ['red', 'orange', 'pink', 'green'],
-        correctAnswer: 'green'
-      },
-      {
-        question: 'What is the current year?',
-        answers: ['1970', '2015', '2020', '2005'],
-        correctAnswer: '2020'
-      },
-      {
-        question: 'What color is broccoli?',
-        answers: ['red', 'orange', 'pink', 'green'],
-        correctAnswer: 'green'
-      }
-    ],
+    questions: shuffle(questions),
     quizStarted: false,
     questionNumber: 0,
     score: 0
   };
+
+  function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+  }
 
   /********** TEMPLATE GENERATION FUNCTIONS **********/
   function createQuestion(question) {
@@ -94,12 +99,15 @@ $(function () {
   }
 
   function renderResults() {
-    return $('main').html(`
+    $('header h2').css('display', 'none');
+    $('header').css('justify-content', 'center');
+    $('main').html(`
       <div class="end-game">
         ${createScore()}
         ${createPlayAgainButton()}
       </div>
     `);
+    return $('.js-play-again-btn').on('click', restartGame);
   }
 
   function render() {
@@ -108,6 +116,12 @@ $(function () {
   }
 
   /********** EVENT HANDLER FUNCTIONS **********/
+  function restartGame() {
+    resetState();
+    renderHeader();
+    return renderQuestion(store.questions[store.questionNumber]);
+  }
+
   function startButtonClicked() {
     store.quizStarted = true;
     renderHeader();
@@ -144,6 +158,12 @@ $(function () {
   /********** HELPER FUNCTIONS **********/
   function checkAnswer(question, givenAnswer) {
     return question.correctAnswer === givenAnswer;
+  }
+
+  function resetState() {
+    store.questions = shuffle(questions);
+    store.questionNumber = 0;
+    return (store.score = 0);
   }
 
   function getCorrectAnswer() {
