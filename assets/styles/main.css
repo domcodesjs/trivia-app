@@ -92,6 +92,22 @@ input[type='submit']:hover {
   background-color: #205493;
 }
 
+.next-btn:hover {
+  transform: scale(1.1);
+}
+
+.next-btn:focus {
+  transform: scale(1.1);
+}
+
+.next-btn:disabled:hover {
+  transform: none;
+}
+
+.next-btn:disabled:focus {
+  transform: none;
+}
+
 .next-btn:disabled {
   background-color: #5b616b;
 }
