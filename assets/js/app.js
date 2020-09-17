@@ -32,6 +32,33 @@ $(function () {
     score: 0
   };
 
+  function getQuestions(category, difficulty) {
+    // also have a local json file with some categories/questions I could locally pull from
+    const API_URL = 'https://opentdb.com/api.php?amount=10';
+    const fetchPromise = fetch(API_URL);
+
+    function shuffleAnswers(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    return fetchPromise
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        store.questions = res.results.map((question) => {
+          return {
+            question: question.question,
+            answers: shuffleAnswers([
+              ...question.incorrect_answers,
+              question.correct_answer
+            ]),
+            correctAnswer: question.correct_answer
+          };
+        });
+      });
+  }
+
   const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
   const wrongSound = new Audio('./assets/sounds/wrong-sound.mp3');
 
@@ -68,7 +95,7 @@ $(function () {
 
   function createQuizNextButton() {
     if (!(store.questionNumber === store.questions.length - 1)) {
-      return '<button class="ext-btn" type="button" disabled>Next Question</button>';
+      return '<button class="next-btn" type="button" disabled>Next Question</button>';
     }
     return '<button class="next-btn" type="button" disabled>See Results</button>';
   }
@@ -98,6 +125,7 @@ $(function () {
   }
 
   function init() {
+    getQuestions();
     $('main').html(createStartButton());
     return $('.js-start-btn').on('click', startBtnClick);
   }
