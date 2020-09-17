@@ -81,7 +81,7 @@ $(function () {
   /********** RENDER FUNCTION(S) **********/
   function renderHeader() {
     $('header').html(createGameHeader());
-    $('header').css('justify-content', 'space-between');
+    return $('header').css('justify-content', 'space-between');
   }
 
   function renderQuestion() {
@@ -99,14 +99,14 @@ $(function () {
 
   function init() {
     $('main').html(createStartButton());
-    $('.js-start-btn').on('click', startBtnClick);
+    return $('.js-start-btn').on('click', startBtnClick);
   }
 
   /********** EVENT HANDLER FUNCTIONS **********/
   function startBtnClick() {
     store.quizStarted = true;
     renderHeader();
-    renderQuestion(store.questions[store.questionNumber]);
+    return renderQuestion(store.questions[store.questionNumber]);
   }
 
   function onSubmit(e) {
