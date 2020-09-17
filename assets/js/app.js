@@ -51,7 +51,8 @@ $(function () {
     questions: shuffle(questions),
     quizStarted: false,
     questionNumber: 0,
-    score: 0
+    correctScore: 0,
+    incorrectScore: 0
   };
 
   function shuffle(arr) {
@@ -78,7 +79,9 @@ $(function () {
 
   function createScore() {
     return `
-      <h3>You scored ${(store.score / store.questions.length) * 100}%!</h3>
+      <h3>You scored ${
+        (store.correctScore / store.questions.length) * 100
+      }%</h3>
     `;
   }
 
@@ -88,8 +91,14 @@ $(function () {
 
   function createGameHeader() {
     return `
-    <h2>Score: ${store.score}</h2>
-    <h1>Trivia</h1>
+      <div>
+        <p>Correct</p>
+        <h2>${store.correctScore}</h2>
+      </div>
+      <div>
+        <p>Wrong</p>
+        <h2>${store.incorrectScore}</h2>
+      </div>
   `;
   }
 
@@ -118,12 +127,12 @@ $(function () {
   }
 
   function renderUpdatedPoints() {
-    return $('header h2:first').text(`Score: ${store.score}`);
+    $('header h2:last').text(`${store.incorrectScore}`);
+    return $('header h2:first').text(`${store.correctScore}`);
   }
 
   function renderResults() {
-    $('header h2').css('display', 'none');
-    $('header').css('justify-content', 'center');
+    $('header').html('<h1>Javascript Quiz</h1>');
     $('main').html(`
       <div class="end-game">
         ${createScore()}
@@ -186,7 +195,8 @@ $(function () {
   function resetState() {
     store.questions = shuffle(questions);
     store.questionNumber = 0;
-    return (store.score = 0);
+    store.incorrectScore = 0;
+    return (store.correctScore = 0);
   }
 
   function getCorrectAnswer() {
@@ -201,7 +211,7 @@ $(function () {
   }
 
   function correctAnswer(answer) {
-    incrementScore();
+    incrementScore('correct');
     incrementQuestionNumber();
     renderUpdatedPoints();
     playSound('correct');
@@ -232,7 +242,9 @@ $(function () {
   }
 
   function incorrectAnswer(answer) {
+    incrementScore('incorrect');
     incrementQuestionNumber();
+    renderUpdatedPoints();
     playSound('incorrect');
     disableSubmitInputs.bind(this)();
     disableTransformCSS();
@@ -257,8 +269,11 @@ $(function () {
     return $(this).find('input[type=submit]').attr('disabled', 'disabled');
   }
 
-  function incrementScore() {
-    return (store.score += 1);
+  function incrementScore(string) {
+    if (string === 'incorrect') {
+      return (store.incorrectScore += 1);
+    }
+    return (store.correctScore += 1);
   }
 
   function incrementQuestionNumber() {
