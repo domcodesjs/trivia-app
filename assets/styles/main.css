@@ -153,6 +153,10 @@ button:hover {
   transform: scale(1.1);
 }
 
+button:focus {
+  transform: scale(1.1);
+}
+
 div.end-game {
   display: flex;
   justify-content: center;
