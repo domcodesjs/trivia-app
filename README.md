@@ -1,5 +1,8 @@
 # Trivia App
 
+[Live Site Hosted with Vercel](https://trivia-app-p0isgd8ek.vercel.app/)
+[Live Site Hosted with Github Pages](https://domcodesjs.github.io/trivia-app/)
+
 ### User experience requirements
 
 The following requirements cover what the app must do, from the user's perspective.
@@ -23,8 +26,8 @@ Your quiz app must:
 - [x] Include event handler functions.
 - [x] NOT add additional HTML elements to the boilerplate code's index.html file (you may add attributes, e.g., classes and ids, to the existing HTML elements, or link stylesheets or additional scripts if necessary).
 - [x] Render answer choices in a <form>.
-- [ ] Use semantic HTML, along with CSS and jQuery.
+- [x] Use semantic HTML, along with CSS and jQuery.
       Follow a11y best practices.
-- [ ] Be fully usable by keyboard (which will be easy enough if you start with a form).
-- [ ] Use responsive design.
+- [x] Be fully usable by keyboard (which will be easy enough if you start with a form).
+- [x] Use responsive design.
   - Refer back to the previous checkpoints on responsive design and forms for any help with the HTML/CSS materials.
