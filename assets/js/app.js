@@ -42,7 +42,12 @@ $(function () {
   /********** TEMPLATE GENERATION FUNCTIONS **********/
   function createQuestion(question) {
     return `
-    <h1>${question.question}</h1>  
+    <div>
+      <p>Question ${
+        store.questionNumber + 1
+      } out of ${store.questions.length}</p>
+      <h2>${question.question}</h2>  
+    </div>
     <form class="trivia-question">
       ${question.answers
         .map((answer) => `<input type="submit" value=${answer} >`)
@@ -66,7 +71,6 @@ $(function () {
     return `
     <h2>Score: ${store.score}</h2>
     <h1>Trivia</h1>
-    <h2>Question ${store.questionNumber + 1}/${store.questions.length}</h2>
   `;
   }
 

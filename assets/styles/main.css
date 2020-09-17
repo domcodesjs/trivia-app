@@ -15,7 +15,6 @@ h1 {
 }
 
 main h1 {
-  margin-top: -10vh;
   user-select: none;
 }
 
@@ -58,7 +57,6 @@ main {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 ul {
