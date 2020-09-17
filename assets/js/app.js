@@ -85,7 +85,7 @@ $(function () {
 
   function renderQuestion() {
     $('main').html(createQuestion(store.questions[store.questionNumber]));
-    return $('form').on('submit', onSubmit);
+    return $('form').on('submit', onQuizSubmit);
   }
 
   function renderUpdatedPoints() {
@@ -96,11 +96,6 @@ $(function () {
     return $('main').html(createEndGameScreen());
   }
 
-  function init() {
-    $('main').html(createStartButton());
-    return $('.js-start-btn').on('click', startBtnClick);
-  }
-
   /********** EVENT HANDLER FUNCTIONS **********/
   function startBtnClick() {
     store.quizStarted = true;
@@ -108,7 +103,7 @@ $(function () {
     return renderQuestion(store.questions[store.questionNumber]);
   }
 
-  function onSubmit(e) {
+  function onQuizSubmit(e) {
     e.preventDefault();
     const answer = $(this).find('input[type=submit]:focus');
     const currentQuestionIndex = store.questions[store.questionNumber];
@@ -120,22 +115,19 @@ $(function () {
     }
   }
 
-  function onQuizButtonClick(str) {
+  function onQuizButtonNextClick(str) {
     if (str === 'correct') {
-      correctSound.pause();
-      correctSound.currentTime = 0;
-      if (isGameDone()) {
-        return render();
-      }
-      return renderEndGame();
-    } else if (str === 'incorrect') {
-      incorrectSound.pause();
-      incorrectSound.currentTime = 0;
+      resetSound('correct');
       if (isGameDone()) {
         return render();
       }
       return renderEndGame();
     }
+    resetSound('incorrect');
+    if (isGameDone()) {
+      return render();
+    }
+    return renderEndGame();
   }
 
   /********** HELPER FUNCTIONS **********/
@@ -160,7 +152,7 @@ $(function () {
     incrementScore();
     incrementQuestionNumber();
     renderUpdatedPoints();
-    correctSound.play();
+    playSound('correct');
     disableSubmitInputs.bind(this)();
     disableTransformCSS();
     modifyAnswerCSS(answer, {
@@ -168,24 +160,41 @@ $(function () {
       transform: 'scale(1.1)'
     });
     enableNextButton.bind(this)();
-    $(this)
-      .parent()
-      .find('button')
-      .on('click', () => onQuizButtonClick('correct'));
+    return addQuizNextButtonListener.bind(this)('correct');
+  }
+
+  function playSound(str) {
+    if (str === 'correct') {
+      return correctSound.play();
+    }
+    return incorrectSound.play();
+  }
+
+  function resetSound(str) {
+    if (str === 'correct') {
+      correctSound.pause();
+      return (correctSound.currentTime = 0);
+    }
+    incorrectSound.pause();
+    return (incorrectSound.currentTime = 0);
   }
 
   function incorrectAnswer(answer) {
     incrementQuestionNumber();
-    incorrectSound.play();
+    playSound('incorrect');
     disableSubmitInputs.bind(this)();
     disableTransformCSS();
     modifyAnswerCSS(answer, { 'background-color': '#e31c3d' });
     enableNextButton.bind(this)();
     getCorrectAnswer.bind(this)();
-    $(this)
+    return addQuizNextButtonListener.bind(this)('incorrect');
+  }
+
+  function addQuizNextButtonListener(str) {
+    return $(this)
       .parent()
       .find('button')
-      .on('click', () => onQuizButtonClick('incorrect'));
+      .on('click', () => onQuizButtonNextClick(str));
   }
 
   function modifyAnswerCSS(answer, css) {
@@ -218,6 +227,12 @@ $(function () {
       return false;
     }
     return true;
+  }
+
+  /********** INIT FUNCTION **********/
+  function init() {
+    $('main').html(createStartButton());
+    return $('.js-start-btn').on('click', startBtnClick);
   }
 
   $(init);
