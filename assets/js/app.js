@@ -171,10 +171,8 @@ $(function () {
     const answer = store.questions[store.questionNumber - 1].correctAnswer;
     return answerInputs.each(function () {
       if ($(this).val() === answer) {
-        $(this).css({
-          'background-color': '#2e8540',
-          transform: 'scale(1.1)'
-        });
+        $(this).css('background-color', '#2e8540');
+        $(this).addClass('animate__animated animate__wobble');
       }
     });
   }
@@ -186,9 +184,9 @@ $(function () {
     playSound('correct');
     disableSubmitInputs.bind(this)();
     disableTransformCSS();
+    answer.addClass('animate__animated animate__tada');
     modifyAnswerCSS(answer, {
-      'background-color': '#2e8540',
-      transform: 'scale(1.1)'
+      'background-color': '#2e8540'
     });
     enableNextButton.bind(this)();
     return addQuizNextButtonListener.bind(this)('correct');

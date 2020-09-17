@@ -112,6 +112,10 @@ input[type='submit']:hover {
   background-color: #5b616b;
 }
 
+.grow {
+  transform: scale(1.1);
+}
+
 button {
   height: 4.8rem;
   cursor: pointer;
