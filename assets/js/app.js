@@ -43,7 +43,7 @@ function createQuestion(question) {
         .map((answer) => `<input type="submit" value=${answer} >`)
         .join('')}
     </form>
-    ${createQuizButton()}
+    ${createQuizNextButton()}
   `;
 }
 
@@ -65,11 +65,11 @@ function createGameHeader() {
   `;
 }
 
-function createQuizButton() {
+function createQuizNextButton() {
   if (!(store.questionNumber === store.questions.length - 1)) {
-    return '<button class="js-next-btn next-btn" type="button" disabled>Next Question</button>';
+    return '<button class="ext-btn" type="button" disabled>Next Question</button>';
   }
-  return '<button class="done-btn" type="button">See Results</button>';
+  return '<button class="next-btn" type="button" disabled>See Results</button>';
 }
 
 function render() {
@@ -148,7 +148,7 @@ function getCorrectAnswer() {
   const answer = store.questions[store.questionNumber - 1].correctAnswer;
   return answerInputs.each(function () {
     if ($(this).val() === answer) {
-      $(this).css('background-color', '#2e8540');
+      $(this).css({ 'background-color': '#2e8540', transform: 'scale(1.1)' });
     }
   });
 }
@@ -159,7 +159,9 @@ function correctAnswer(answer) {
   renderUpdatedPoints();
   correctSound.play();
   $(this).find(':submit').attr('disabled', 'disabled');
-  $(answer).css('background-color', '#2e8540');
+  $('input[type=submit]:hover').css('transform', 'scale(1)');
+  $('input[type=submit]:submit').css('transform', 'scale(1)');
+  $(answer).css({ 'background-color': '#2e8540', transform: 'scale(1.1)' });
   $(this).parent().find('button').removeAttr('disabled');
   $(this)
     .parent()
@@ -171,7 +173,9 @@ function wrongAnswer(answer) {
   store.questionNumber += 1;
   wrongSound.play();
   $(this).find('input[type=submit]').attr('disabled', 'disabled');
-  answer.css('background-color', '#e31c3d');
+  $('input[type=submit]:hover').css('transform', 'scale(1)');
+  $('input[type=submit]:submit').css('transform', 'scale(1)');
+  answer.css({ 'background-color': '#e31c3d' });
   $(this).parent().find('button').removeAttr('disabled');
   getCorrectAnswer.bind(this)();
   $(this)
