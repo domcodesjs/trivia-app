@@ -47,10 +47,10 @@ $(function () {
   `;
   }
 
-  function createEndGameScreen() {
+  function createScore() {
     return `
-    You scored ${(store.score / store.questions.length) * 100}%!
-  `;
+      <h3>You scored ${(store.score / store.questions.length) * 100}%!</h3>
+    `;
   }
 
   function createStartButton() {
@@ -65,16 +65,17 @@ $(function () {
   `;
   }
 
+  function createPlayAgainButton() {
+    return `
+      <button class="js-play-again-btn play-again-btn">Play Again</button>
+    `;
+  }
+
   function createQuizNextButton() {
     if (!(store.questionNumber === store.questions.length - 1)) {
       return '<button class="next-btn" type="button" disabled>Next Question</button>';
     }
     return '<button class="next-btn" type="button" disabled>See Results</button>';
-  }
-
-  function render() {
-    renderHeader();
-    return renderQuestion();
   }
 
   /********** RENDER FUNCTION(S) **********/
@@ -92,12 +93,22 @@ $(function () {
     return $('header h2:first').text(`Score: ${store.score}`);
   }
 
-  function renderEndGame() {
-    return $('main').html(createEndGameScreen());
+  function renderResults() {
+    return $('main').html(`
+      <div class="end-game">
+        ${createScore()}
+        ${createPlayAgainButton()}
+      </div>
+    `);
+  }
+
+  function render() {
+    renderHeader();
+    return renderQuestion();
   }
 
   /********** EVENT HANDLER FUNCTIONS **********/
-  function startBtnClick() {
+  function startButtonClicked() {
     store.quizStarted = true;
     renderHeader();
     return renderQuestion(store.questions[store.questionNumber]);
@@ -121,13 +132,13 @@ $(function () {
       if (isGameDone()) {
         return render();
       }
-      return renderEndGame();
+      return renderResults();
     }
     resetSound('incorrect');
     if (isGameDone()) {
       return render();
     }
-    return renderEndGame();
+    return renderResults();
   }
 
   /********** HELPER FUNCTIONS **********/
@@ -197,21 +208,12 @@ $(function () {
       .on('click', () => onQuizButtonNextClick(str));
   }
 
-  function modifyAnswerCSS(answer, css) {
-    return answer.css(css);
-  }
-
   function enableNextButton() {
     return $(this).parent().find('button').removeAttr('disabled');
   }
 
   function disableSubmitInputs() {
     return $(this).find('input[type=submit]').attr('disabled', 'disabled');
-  }
-
-  function disableTransformCSS() {
-    $('input[type=submit]:hover').css('transform', 'scale(1)');
-    return $('input[type=submit]:submit').css('transform', 'scale(1)');
   }
 
   function incrementScore() {
@@ -229,10 +231,18 @@ $(function () {
     return true;
   }
 
+  function modifyAnswerCSS(answer, css) {
+    return answer.css(css);
+  }
+  function disableTransformCSS() {
+    $('input[type=submit]:hover').css('transform', 'scale(1)');
+    return $('input[type=submit]:submit').css('transform', 'scale(1)');
+  }
+
   /********** INIT FUNCTION **********/
   function init() {
     $('main').html(createStartButton());
-    return $('.js-start-btn').on('click', startBtnClick);
+    return $('.js-start-btn').on('click', startButtonClicked);
   }
 
   $(init);
