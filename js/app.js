@@ -1,26 +1,45 @@
-// const store = {
-//   // will pull locally and from api
-//   questions: [
-//     {
-//       question: 'What color is broccoli?',
-//       answers: ['red', 'orange', 'pink', 'green'],
-//       correctAnswer: 'green'
-//     },
-//     {
-//       question: 'What is the current year?',
-//       answers: ['1970', '2015', '2020', '2005'],
-//       correctAnswer: '2020'
-//     }
-//   ],
-//   quizStarted: false,
-//   loading: false,
-//   questionNumber: 0,
-//   score: 0
-// };
-
 const store = {
-  // will pull locally and from api
   questions: [
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
+    {
+      question: 'What color is broccoli?',
+      answers: ['red', 'orange', 'pink', 'green'],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: ['1970', '2015', '2020', '2005'],
+      correctAnswer: '2020'
+    },
     {
       question: 'What color is broccoli?',
       answers: ['red', 'orange', 'pink', 'green'],
@@ -37,6 +56,9 @@ const store = {
   questionNumber: 0,
   score: 0
 };
+
+const correctSound = new Audio('../sound/correct-sound.mp3');
+const wrongSound = new Audio('../sound/wrong-sound.mp3');
 
 // const categories = {
 //   'General Knowledge': 1,
@@ -55,38 +77,35 @@ const store = {
 //   Animal: 8
 // };
 
-function getQuestions(category, difficulty) {
-  // also have a local json file with some categories/questions I could locally pull from
-  const API_URL = 'https://opentdb.com/api.php?amount=10';
-  const fetchPromise = fetch(API_URL);
+// function getQuestions(category, difficulty) {
+//   // also have a local json file with some categories/questions I could locally pull from
+//   const API_URL = 'https://opentdb.com/api.php?amount=10';
+//   const fetchPromise = fetch(API_URL);
 
-  function shuffleAnswers(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-  }
+//   function shuffleAnswers(arr) {
+//     return arr.sort(() => Math.random() - 0.5);
+//   }
 
-  return fetchPromise
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => {
-      store.questions = res.results.map((question) => {
-        return {
-          question: question.question,
-          answers: shuffleAnswers([
-            ...question.incorrect_answers,
-            question.correct_answer
-          ]),
-          correctAnswer: question.correct_answer
-        };
-      });
-      console.log(store);
-    });
-}
+//   return fetchPromise
+//     .then((res) => {
+//       return res.json();
+//     })
+//     .then((res) => {
+//       store.questions = res.results.map((question) => {
+//         return {
+//           question: question.question,
+//           answers: shuffleAnswers([
+//             ...question.incorrect_answers,
+//             question.correct_answer
+//           ]),
+//           correctAnswer: question.correct_answer
+//         };
+//       });
+//       console.log(store);
+//     });
+// }
 
-console.log(getQuestions());
-
-const correctSound = new Audio('../sound/correct-sound.mp3');
-const wrongSound = new Audio('../sound/wrong-sound.mp3');
+// getQuestions();
 
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 function createQuestion(question) {
@@ -98,6 +117,7 @@ function createQuestion(question) {
         .join('')}
     </form>
     <button class="js-next-btn next-btn" type="button" disabled>Next Question</button>
+    <button class="js-next-btn done-btn" type="button">Next Question</button>
   `;
 }
 
@@ -111,15 +131,32 @@ function createStartButton() {
   return '<button class="js-start-btn">Start</button>';
 }
 
-/********** RENDER FUNCTION(S) **********/
-function renderQuestion(question) {
-  $('main').html(createQuestion(question));
-  $('form').on('submit', onSubmit);
-  $('form').on('click', '.js-next-btn', () => console.log('asdf'));
+function createGameHeader() {
+  return `
+    <h2>Score ${store.score}</h2>
+    <h1>Trivia</h1>
+    <h2>Question ${store.questionNumber + 1}/${store.questions.length}</h2>
+  `;
 }
 
-function renderNextButton() {
-  $('main').append(createNextButton());
+function render() {
+  renderHeader();
+  renderQuestion();
+}
+
+/********** RENDER FUNCTION(S) **********/
+function renderHeader() {
+  $('header').html(createGameHeader());
+  $('header').css('justify-content', 'space-between');
+}
+
+function renderQuestion() {
+  $('main').html(createQuestion(store.questions[store.questionNumber]));
+  return $('form').on('submit', onSubmit);
+}
+
+function renderUpdatedPoints() {
+  return $('header h2:first').text(`Score: ${store.score}`);
 }
 
 function renderEndGame() {
@@ -134,7 +171,8 @@ function init() {
 /********** EVENT HANDLER FUNCTIONS **********/
 function startBtnClick() {
   store.quizStarted = true;
-  renderQuestion(store.questions[0]);
+  renderHeader();
+  renderQuestion(store.questions[store.questionNumber]);
 }
 
 function onSubmit(e) {
@@ -143,6 +181,7 @@ function onSubmit(e) {
   if (checkAnswer(store.questions[store.questionNumber], answer.val())) {
     store.score += 1;
     store.questionNumber += 1;
+    renderUpdatedPoints();
     correctSound.play();
     $(this).find(':submit').attr('disabled', 'disabled');
     answer.css('background-color', '#2e8540');
@@ -153,7 +192,7 @@ function onSubmit(e) {
       .on('click', () => {
         correctSound.pause();
         correctSound.currentTime = 0;
-        return renderQuestion(store.questions[store.questionNumber]);
+        return render();
       });
   } else {
     store.questionNumber += 1;
@@ -168,7 +207,7 @@ function onSubmit(e) {
       .on('click', () => {
         wrongSound.pause();
         wrongSound.currentTime = 0;
-        return renderQuestion(store.questions[store.questionNumber]);
+        return render();
       });
   }
 }

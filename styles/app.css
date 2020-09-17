@@ -1,11 +1,8 @@
-/* Your styles should be mobile-first and responsive */
-
-/** 
-  * If you are unclear on how to utilize a mobile-first, responsive technique to write your CSS, here is an example: 
-  *
-  * https://github.com/andreacardybailey/responsive_example/blob/master/styles/responsive-base.css 
-  *
-*/
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@font-face {
+  font-family: mikaldoUltra;
+  src: url('../fonts/mikado_ultra.otf');
+}
 
 *,
 *:before,
@@ -17,6 +14,16 @@ h1 {
   margin: 0;
 }
 
+main h1 {
+  margin-top: -10vh;
+}
+
+header h1 {
+  font-family: mikaldoUltra;
+  font-size: 8rem;
+  letter-spacing: 0.4rem;
+}
+
 html {
   font-size: 62.5%;
   box-sizing: inherit;
@@ -24,10 +31,13 @@ html {
 
 body {
   font-size: 1.6rem;
+  background-color: #212121;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
 }
 
 form {
-  margin-top: 2.4rem;
+  margin-top: 1.6rem;
   margin-bottom: 3.2rem;
 }
 
@@ -94,6 +104,6 @@ button {
   text-transform: uppercase;
   border: none;
   color: #fff;
-  background-color: #494440;
-  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.4);
+  background-color: #0071bc;
+  box-shadow: 0 0.4rem 1rem rgba(255, 255, 255, 0.2);
 }
