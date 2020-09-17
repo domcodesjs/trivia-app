@@ -79,9 +79,9 @@ $(function () {
 
   function createScore() {
     return `
-      <h3>You scored ${
+      <p class="center">You scored ${
         (store.correctScore / store.questions.length) * 100
-      }%</h3>
+      }%! You got ${store.correctScore} out of ${store.questions.length} questions right.</p>
     `;
   }
 

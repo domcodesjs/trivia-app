@@ -167,3 +167,11 @@ div.end-game {
 div.end-game button {
   margin-top: 1.6rem;
 }
+
+.center {
+  text-align: center;
+}
+
+p {
+  line-height: 2.4rem;
+}
