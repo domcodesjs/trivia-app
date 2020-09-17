@@ -56,24 +56,23 @@ const store = {
   score: 0
 };
 
-const correctSound = new Audio('../sound/correct-sound.mp3');
-const wrongSound = new Audio('../sound/wrong-sound.mp3');
+const correctSound = new Audio('./assets/sounds/correct-sound.mp3');
+const wrongSound = new Audio('./assets/sounds/wrong-sound.mp3');
 
-// const categories = {
-//   'General Knowledge': 1,
-//   'Science: Computers': 455,
-//   'Science: Mathematics': 34,
-//   'Science & Nature': 2,
-//   Mythology: 3,
-//   Sports: 4,
-//   Geography: 5,
-//   History: 6,
-//   Politics: 7,
-//   Art: 8,
-//   Celebrities: 8,
-//   Animals: 8,
-//   Vehicles: 8,
-//   Animal: 8
+// const triviaCategories = {
+//   'General Knowledge': 9,
+//   'Science: Computers': 18,
+//   'Science: Mathematics': 19,
+//   'Science & Nature': 17,
+//   Mythology: 20,
+//   Sports: 21,
+//   Geography: 22,
+//   History: 23,
+//   Politics: 24,
+//   Art: 25,
+//   Animals: 27,
+//   Animal: 27,
+//   Vehicles: 28
 // };
 
 // function getQuestions(category, difficulty) {
@@ -129,6 +128,34 @@ function createStartButton() {
   return '<button class="js-start-btn">Start</button>';
 }
 
+// for later
+// function createGameOptions() {
+//   return `
+//     <form>
+//       ${createCategoryDropdown()}
+//     </form>
+//   `;
+// }
+
+// for later
+// function createCategoryDropdown() {
+//   return `
+//     <label for="categories">Choose a category:</label>
+//     <select name="categories" id="cars">${createCategoryOptions()}</select>
+//   `;
+// }
+
+// for later
+// function createCategoryOptions() {
+//   let selections = '';
+
+//   for (let key in triviaCategories) {
+//     selections += `<option value="${triviaCategories[key]}">${key}</option>)`;
+//   }
+
+//   return selections;
+// }
+
 function createGameHeader() {
   return `
     <h2>Score: ${store.score}</h2>
@@ -169,7 +196,7 @@ function renderEndGame() {
 }
 
 function init() {
-  $('main').append(createStartButton());
+  $('main').html(createStartButton());
   $('.js-start-btn').on('click', startBtnClick);
 }
 
