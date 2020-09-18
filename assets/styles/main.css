@@ -175,3 +175,32 @@ div.end-game button {
 p {
   line-height: 2.4rem;
 }
+
+@media (min-width: 1200px) {
+  body {
+    background-color: #000;
+  }
+
+  header {
+    height: 50vh;
+    justify-content: flex-start;
+    align-items: flex-end;
+    width: 80vw;
+  }
+
+  header img {
+    width: 10rem;
+  }
+
+  main {
+    width: 80vw;
+    height: 50vh;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  main p {
+    font-size: 2.4rem;
+    margin: 0;
+  }
+}

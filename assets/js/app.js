@@ -60,21 +60,33 @@ $(function () {
   }
 
   /********** TEMPLATE GENERATION FUNCTIONS **********/
+  // Start Screen Templates
+  function createJavascriptHeader() {
+    return '<img src="./assets/images/javascript.svg" alt="logo">';
+  }
+
+  function createStartScreenInfoHeading() {
+    return '<h1>So you think you know Javascript?</h1>';
+  }
+  function createStartScreenInfoText() {
+    return '<p>Take this quiz to test your knowledge on key Javascript concepts.</p>';
+  }
+
   function createQuestion(question) {
     return `
-    <div>
-      <p>Question ${
-        store.questionNumber + 1
-      } out of ${store.questions.length}</p>
-      <h2>${question.question}</h2>  
-    </div>
-    <form class="trivia-question">
-      ${question.answers
-        .map((answer) => `<input type="submit" value="${answer}" >`)
-        .join('')}
-    </form>
-    ${createQuizNextButton()}
-  `;
+      <div>
+        <p>Question ${
+          store.questionNumber + 1
+        } out of ${store.questions.length}</p>
+        <h2>${question.question}</h2>  
+      </div>
+      <form class="trivia-question">
+        ${question.answers
+          .map((answer) => `<input type="submit" value="${answer}" >`)
+          .join('')}
+      </form>
+      ${createQuizNextButton()}
+    `;
   }
 
   function createScore() {
@@ -119,6 +131,13 @@ $(function () {
   function renderHeader() {
     $('header').html(createGameHeader());
     return $('header').css('justify-content', 'space-between');
+  }
+
+  function renderStartScreen() {
+    $('header').html(createJavascriptLogo());
+    return $('main').html(
+      `<div>${createStartScreenInfoHeading()}${createStartScreenInfoText()}${createStartButton()}</div>`
+    );
   }
 
   function renderQuestion() {
@@ -297,7 +316,7 @@ $(function () {
 
   /********** INIT FUNCTION **********/
   function init() {
-    $('main').html(createStartButton());
+    renderStartScreen();
     return $('.js-start-btn').on('click', startButtonClicked);
   }
 
